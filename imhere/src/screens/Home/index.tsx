@@ -1,12 +1,27 @@
 import { styles } from "./styles";
-import { Text, TextInput, View,TouchableOpacity ,ScrollView } from "react-native";
+import React from "react";
+import { Text, TextInput, View,TouchableOpacity ,FlatList, Alert } from "react-native";
 import {Participant} from "../../components/Participant";
 export function Home() {
 const participants = ["rodrigo", "pedro", "maria", "joao", "ana","juan", "kevin", ];
   function handlePraticipantAdd(){
+    if (participants.includes("rodrigo")){
+      return Alert.alert("Participante existe","Já exite um participante na lista com esse nome.")
+    }
     console.log("clicou")
   }
   function handlePraticipantRemove(name: string){
+     Alert.alert("Remover",`Remover participante ${name}?`,[
+      {
+        text: "Sim",
+onPress:() => Alert.alert("Deletado!")  
+      },
+      {
+
+text: 'nao',
+style: 'cancel'
+}
+     ])
     console.log(`remove ${name}`)
   }
   return (
@@ -27,13 +42,15 @@ const participants = ["rodrigo", "pedro", "maria", "joao", "ana","juan", "kevin"
         <Text style={styles.buttonText}>+</Text>
       </TouchableOpacity>
       </View>
-<ScrollView showsVerticalScrollIndicator={false}>
       {
-        participants.map((participant) => (
-          <Participant key={participant} name={participant} onRemove={() => handlePraticipantRemove(participant)}/>
-        ))
+        <FlatList
+          data={participants}
+          keyExtractor={item => item}
+          renderItem={({item})=>(
+            <Participant key={item} name={item} onRemove={() => handlePraticipantRemove(item)}/>
+          )}
+        />
 }
-      </ScrollView>
     </View>
   )
 }
